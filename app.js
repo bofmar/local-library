@@ -14,7 +14,6 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', 'false');
 const mongoDB = process.env.DB_PATH;
 
-console.log(mongoDB);
 async function main() {
   await mongoose.connect(mongoDB);
 }
