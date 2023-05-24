@@ -7,8 +7,8 @@ exports.author_list = asyncHandler(async (_req, res, next) => {
 });
 
 // Display detail page for a single author
-exports.author_detail = asyncHandler(async (_req, res, next) => {
-	res, next.send('NOT IMPLEMENTED!!: Author Detail');
+exports.author_detail = asyncHandler(async (req, res, next) => {
+	res, next.send(`NOT IMPLEMENTED!!: Author Detail: ${req.params.id}`);
 });
 
 // Display Author create from GET
