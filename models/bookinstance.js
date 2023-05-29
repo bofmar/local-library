@@ -17,7 +17,7 @@ const BookInstanseSchema = new Schema({
 
 // Virtual for bookinstance url
 BookInstanseSchema.virtual('url').get(function() {
-  return `/catalog/bookInstanse/${this._id}`;
+  return `/catalog/bookinstance/${this._id}`;
 });
 
 // Virtual for bookinstance due dates
