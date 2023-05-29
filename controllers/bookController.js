@@ -33,9 +33,10 @@ exports.index = asyncHandler(async (_req, res, next) => {
 // Display list of all books.
 exports.book_list = asyncHandler(async (_req, res, next) => {
 	const allBooks = await Book.find({}, 'title author').
-		sort().
+		sort({ title: 1 }).
 		populate('author').
 		exec();
+
 	res.render('book_list', {title: 'Book List', book_list: allBooks});
 });
 
