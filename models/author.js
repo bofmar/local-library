@@ -10,7 +10,7 @@ const AuthorSchema = new Schema({
 });
 
 // Virtual for author's full name
-AuthorSchema.virtual('name').get(() => {
+AuthorSchema.virtual('name').get(function () {
   // to avoid errors in case an author has neither a first name or a family name we handle
   // the exception by returning an empty string
   let fullName = '';
