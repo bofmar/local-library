@@ -38,10 +38,46 @@ exports.genre_create_get = (_req, res, next) => {
 };
 
 // Handle Genre create on POST.
-exports.genre_create_post = asyncHandler(async (_req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre create POST");
-});
+exports.genre_create_post = [
+	// validate and sanitize the name field
+	body('name', 'Genre name must contain at least three characters')
+	.trinm()
+	.isLength({ min: 3 })
+	.escape(),
 
+	// Proccess request after validation and sanitization
+	asyncHandler(async(req, res, next) => {
+		// Extract the validation errors from the request
+		const errors = validationResult(req);
+
+		// Create a genre object with the escaped and trimmed data
+		const genre = new Genre({ name: req.body.name });
+
+		if(!errors.isEmpty()) {
+			// There are errors. Render the form again with sanitized values/error messages
+			res.render('genre_form',
+				{
+					title: 'Create Genre',
+					genre: genre,
+					errors: errors.array(),
+				});
+			return;
+		} else {
+			// Data in the form is valid
+			// Check if genre with the smae name exists
+			const genreExists = await Genre.findOne({ name: req.body.name }).exec();
+			if(genreExists) {
+				// Redirect to the existing genre's details page
+				res.redirect(genreExists.url);
+			} else {
+				await genre.save();
+				// New genre saved, redirect to the genre detail page
+				res.redirect(genre.url);
+			}
+		}
+	}),
+];
+	
 // Display Genre delete form on GET.
 exports.genre_delete_get = asyncHandler(async (_req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre delete GET");
