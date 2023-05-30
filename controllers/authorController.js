@@ -99,7 +99,7 @@ exports.author_delete_get = asyncHandler(async (req, res, next) => {
 	]);
 
 	if(author === null) {
-		res.redirect('catalog/authors');
+		res.redirect('/catalog/authors');
 	}
 
 	res.render('author_delete', {
@@ -110,8 +110,24 @@ exports.author_delete_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Author delete from POST
-exports.author_delete_post = asyncHandler(async (_req, res, next) => {
-	res.send('NOT IMPLEMENTED!!: Author delete POST');
+exports.author_delete_post = asyncHandler(async (req, res, next) => {
+	const [author, allBooksByAuthor] = await Promise.all([
+		Author.findById(req.params.id).exec(),
+		Book.find({ author: req.params.id}, 'title summary').exec(),
+	]);
+
+	if(allBooksByAuthor.length > 0){
+		res.render('author_delete', {
+			title: 'Delete Author',
+			author: author,
+			author_books: allBooksByAuthor,
+		});
+		return;
+	}
+	else {
+		await Author.findByIdAndDelete(req.params.id);
+		res.redirect('/catalog/authors');
+	}
 });
 
 // Display Author update from GET
