@@ -41,7 +41,7 @@ exports.genre_create_get = (_req, res, next) => {
 exports.genre_create_post = [
 	// validate and sanitize the name field
 	body('name', 'Genre name must contain at least three characters')
-	.trinm()
+	.trim()
 	.isLength({ min: 3 })
 	.escape(),
 
